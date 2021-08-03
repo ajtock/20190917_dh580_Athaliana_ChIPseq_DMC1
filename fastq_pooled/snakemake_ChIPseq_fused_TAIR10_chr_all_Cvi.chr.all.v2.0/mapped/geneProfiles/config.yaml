@@ -1,0 +1,36 @@
+THREADS: 48
+SAMPLE: [
+         "ColCviF1_DMC1_V5_Rep1_ChIP",
+         "ColLerF1_DMC1_V5_Rep1_ChIP",
+         "ColColF1_DMC1_V5_Rep1_ChIP",
+         "Col_DMC1_V5_Rep1_ChIP",
+         "Col_DMC1_V5_Rep2_ChIP",
+         "Col_DMC1_V5_Rep1_leaf",
+         "Col_DMC1_V5_Rep1_mock",
+         "Col_DMC1_V5_Rep2_mock"
+        ]
+FEATURES:
+      chrName: [
+#                "Chr1",
+#                "Chr2",
+#                "Chr3",
+#                "Chr4",
+#                "Chr5",
+                "Chr1_Chr2_Chr3_Chr4_Chr5"
+               ]
+      genomeRegion: [
+                     "genomewide"
+                    ]
+MAPPING:
+      mode: "both"
+      reference: "data/index/fused_TAIR10_chr_all_Cvi.chr.all.v2.0"
+COVERAGE:
+      regionBodyLength: 2200
+      startLabel: "TSS"
+      endLabel: "TTS"
+      upstream: 2000
+      downstream: 2000
+      flankName: "2kb"
+      binSize: 10
+      binName: "10bp"
+      sortRegions: "keep"

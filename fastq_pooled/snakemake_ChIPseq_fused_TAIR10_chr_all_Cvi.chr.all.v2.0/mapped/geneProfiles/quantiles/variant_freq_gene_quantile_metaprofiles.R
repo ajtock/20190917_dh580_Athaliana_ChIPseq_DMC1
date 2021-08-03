@@ -178,7 +178,8 @@ ChIPNames <- c(
                "ColColF1_DMC1_V5_Rep1_ChIP",
                "Col_DMC1_V5_Rep1_leaf",
                "Col_DMC1_V5_Rep1_mock",
-               "Col_DMC1_V5_Rep2_mock"
+               "Col_DMC1_V5_Rep2_mock",
+               "Col_REC8_HA_Rep2_ChIP"
               )
 ChIPNamesDir <- c(
                   rep(paste0("20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_", refbase), length(ChIPNames))
@@ -191,7 +192,8 @@ log2ChIPNamesPlot <- c(
                        "Col/Col DMC1 Rep1",
                        "Col DMC1 Leaf",
                        "Col DMC1 Mock1",
-                       "Col DMC1 Mock2"
+                       "Col DMC1 Mock2",
+                       "Col REC8-HA Rep2"
                       )
 ChIPNamesPlot <- log2ChIPNamesPlot
 log2ChIPColours <- c(
@@ -204,23 +206,33 @@ ChIPDirs <- sapply(seq_along(ChIPNames), function(x) {
          "/mapped/geneProfiles/matrices/")
 })
 
-#controlNames <- c(
-#                  "WT_REC8_Myc_Rep1_input"
-#                 )
-#controlNamesDir <- c(
-#                     "REC8_pooled/snakemake_ChIPseq"
-#                    )
-#controlNamesPlot <- c(
-#                      "Paired-end input"
-#                     )
-#controlColours <- c(
-#                    rep("black", length(controlNamesPlot))
-#                   )
-#controlDirs <- sapply(seq_along(controlNames), function(x) {
-#  paste0("/home/ajt200/analysis/",
-#         controlNamesDir[x],
-#         "/mapped/geneProfiles/matrices/")
-#})
+controlNames <- c(
+                  "Col_DMC1_V5_Rep1_art75",
+                  "Col_DMC1_V5_Rep2_art150",
+                  "ColCviF1_DMC1_V5_Rep1_art150",
+                  "ColLerF1_DMC1_V5_Rep1_art150",
+                  "ColColF1_DMC1_V5_Rep1_art150",
+                  "Col_REC8_Myc_Rep1_input"
+                 )
+controlNamesDir <- c(
+                     rep(paste0("20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_", refbase), length(controlNames))
+                    )
+controlNamesPlot <- c(
+                      "Col DMC1 Rep1 art75",
+                      "Col DMC1 Rep2 art150",
+                      "Col/Cvi DMC1 Rep1 art150",
+                      "Col/Ler DMC1 Rep1 art150",
+                      "Col/Col DMC1 Rep1 art150",
+                      "Col REC8-Myc Rep1 input"
+                     )
+controlColours <- c(
+                    rep("black", length(controlNamesPlot))
+                   )
+controlDirs <- sapply(seq_along(controlNames), function(x) {
+  paste0("/home/ajt200/analysis/",
+         controlNamesDir[x],
+         "/mapped/geneProfiles/matrices/")
+})
 
 ## ChIP
 # featureAcc1

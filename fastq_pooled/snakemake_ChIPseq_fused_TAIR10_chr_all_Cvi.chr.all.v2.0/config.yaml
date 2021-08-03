@@ -1,0 +1,53 @@
+SAMPLES: [
+#          "ColCviF1_DMC1_V5_Rep1_ChIP",
+#          "ColLerF1_DMC1_V5_Rep1_ChIP",
+#          "ColColF1_DMC1_V5_Rep1_ChIP",
+#          "Col_DMC1_V5_Rep1_ChIP",
+#          "Col_DMC1_V5_Rep2_ChIP",
+#          "Col_DMC1_V5_Rep1_leaf",
+#          "Col_DMC1_V5_Rep1_mock",
+#          "Col_DMC1_V5_Rep2_mock",
+          "ColCviF1_DMC1_V5_Rep1_art150",
+          "ColLerF1_DMC1_V5_Rep1_art150",
+          "ColColF1_DMC1_V5_Rep1_art150",
+          "Col_DMC1_V5_Rep2_art150",
+          "Col_DMC1_V5_Rep1_art75",
+          "Col_REC8_Myc_Rep1_input",
+          "Col_REC8_HA_Rep2_ChIP"
+         ]
+THREADS: 48
+MEMORY: "250g"
+FILTER:
+  cutadapt:
+      R1_5prime_cut: 0 # -u
+      R1_3prime_cut: -0 # -u
+      R2_5prime_cut: 0 # -U
+      R2_3prime_cut: -0 # -U
+      adapter_R1: AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC # -a
+      adapter_R2: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT # -A
+      quality-filter: 20 # -q
+      minimum-overlap: 3 # -O (default: 3)
+      minimum-length: 20 # -m
+      maximum-length: 5000 # -M
+      extra-params:
+# NOTE: reference genome-specific mapping parameters
+MAPPING:
+      alignments: 20 # "In -k <N> mode, Bowtie 2 searches for up to N distinct, valid alignments for each read"
+      reference: "data/index/fused_TAIR10_chr_all_Cvi.chr.all.v2.0"
+      MAPQunique: 42 # -q
+      MAPQmaxi: 10 # -q
+      sortMemory: "5G"
+COVERAGE:
+      normalizeUsing: "None"
+      ignoreForNormalization: "Col_ChrM Col_ChrC Cvi_000043F Cvi_000054F Cvi_000058F Cvi_000059F Cvi_000064F Cvi_000075F Cvi_000087F Cvi_000097F Cvi_000099F Cvi_000121F Cvi_000127F Cvi_000129F Cvi_000135F Cvi_000137F Cvi_000138F Cvi_000151F Cvi_000154F Cvi_000158F Cvi_000159F Cvi_000161F Cvi_000173F Cvi_000174F Cvi_000179F Cvi_000189F Cvi_000195F Cvi_000201F Cvi_000209F Cvi_000218F Cvi_000224F Cvi_000227F Cvi_000229F Cvi_000230F Cvi_000246F Cvi_000255F Cvi_000260F Cvi_000266F Cvi_000269F Cvi_000276F Cvi_000279F Cvi_000281F Cvi_000284F Cvi_000292F Cvi_000293F Cvi_000298F Cvi_000301F Cvi_000306F Cvi_000307F Cvi_000316F Cvi_000317F Cvi_000320F Cvi_000321F Cvi_000322F Cvi_000325F Cvi_000328F Cvi_000330F Cvi_000331F Cvi_000333F Cvi_000334F Cvi_000336F Cvi_000344F Cvi_000346F Cvi_000355F Cvi_000359F Cvi_000361F Cvi_000362F Cvi_000365F Cvi_000368F Cvi_000370F Cvi_000372F Cvi_000375F Cvi_000376F Cvi_000380F Cvi_000382F Cvi_000383F Cvi_000386F Cvi_000390F Cvi_000392F Cvi_000398F Cvi_000399F Cvi_000402F Cvi_000404F Cvi_000406F Cvi_000412F Cvi_000415F Cvi_000416F Cvi_000417F Cvi_000420F Cvi_000422F Cvi_000423F Cvi_000426F Cvi_000428F Cvi_430 Cvi_431 Cvi_432 Cvi_436 Cvi_438 Cvi_tig00001036"
+      binSize: 1
+      genomeBinSize: 10000
+      genomeBinName: "10kb"
+
+# NEBNext adapter and universal primer for Illumina:
+# https://international.neb.com/-/media/catalog/datacards-or-manuals/manuale7335.pdf
+# https://www.biostars.org/p/149301/
+# https://cutadapt.readthedocs.io/en/stable/guide.html#illumina-truseq
+# http://bioinformatics.cvr.ac.uk/blog/illumina-adapter-and-primer-sequences/
+# TruSeq adapters:
+# http://emea.support.illumina.com/bulletins/2016/12/what-sequences-do-i-use-for-adapter-trimming.html

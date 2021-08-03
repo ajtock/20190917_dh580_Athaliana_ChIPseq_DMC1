@@ -4,14 +4,14 @@
 # using art_illumina v2.5.8
 
 # Usage on plantsci cluster node7:
-# csmit -m 50G -c 1 "bash ./art_illumina.sh fused_TAIR10_chr_all_Cvi.chr.all.v2.0 ColCviF1_DMC1_V5_Rep1_art150_R HSXt 150 210 86"
-# csmit -m 50G -c 1 "bash ./art_illumina.sh fused_TAIR10_chr_all_Ler.chr.all.v2.0 ColLerF1_DMC1_V5_Rep1_art150_R HSXt 150 267 102"
-# csmit -m 50G -c 1 "bash ./art_illumina.sh TAIR10_chr_all_renamed_fa_headers ColColF1_DMC1_V5_Rep1_art150_R HSXt 150 216 84"
-# csmit -m 50G -c 1 "bash ./art_illumina.sh TAIR10_chr_all_renamed_fa_headers Col_DMC1_V5_Rep2_art150_R HSXt 150 275 98"
-# csmit -m 50G -c 1 "bash ./art_illumina.sh TAIR10_chr_all_renamed_fa_headers Col_DMC1_V5_Rep1_art75_R NS50 75 214 85"
-## csmit -m 50G -c 1 "bash ./art_illumina.sh TAIR10_chr_all_renamed_fa_headers Col_DMC1_V5_Rep1_leaf_art150_R HSXt 150 242 95"
-## csmit -m 50G -c 1 "bash ./art_illumina.sh TAIR10_chr_all_renamed_fa_headers Col_DMC1_V5_Rep1_mock_art150_R HSXt 150 223 90"
-## csmit -m 50G -c 1 "bash ./art_illumina.sh TAIR10_chr_all_renamed_fa_headers Col_DMC1_V5_Rep2_mock_art150_R HSXt 150 235 94"
+# csmit -m 50G -c 1 "bash ./art_illumina.sh fused_TAIR10_chr_all_Cvi.chr.all.v2.0 ColCviF1_DMC1_V5_Rep1_art150_R HSXt 150 210 86 100"
+# csmit -m 50G -c 1 "bash ./art_illumina.sh fused_TAIR10_chr_all_Ler.chr.all.v2.0 ColLerF1_DMC1_V5_Rep1_art150_R HSXt 150 267 102 100"
+# csmit -m 50G -c 1 "bash ./art_illumina.sh TAIR10_chr_all_renamed_fa_headers ColColF1_DMC1_V5_Rep1_art150_R HSXt 150 216 84 200"
+# csmit -m 50G -c 1 "bash ./art_illumina.sh TAIR10_chr_all_renamed_fa_headers Col_DMC1_V5_Rep2_art150_R HSXt 150 275 98 200"
+# csmit -m 50G -c 1 "bash ./art_illumina.sh TAIR10_chr_all_renamed_fa_headers Col_DMC1_V5_Rep1_art75_R NS50 75 214 85 200"
+## csmit -m 50G -c 1 "bash ./art_illumina.sh TAIR10_chr_all_renamed_fa_headers Col_DMC1_V5_Rep1_leaf_art150_R HSXt 150 242 95 200"
+## csmit -m 50G -c 1 "bash ./art_illumina.sh TAIR10_chr_all_renamed_fa_headers Col_DMC1_V5_Rep1_mock_art150_R HSXt 150 223 90 200"
+## csmit -m 50G -c 1 "bash ./art_illumina.sh TAIR10_chr_all_renamed_fa_headers Col_DMC1_V5_Rep2_mock_art150_R HSXt 150 235 94 200"
 
 genome=$1
 out=$2
@@ -19,34 +19,35 @@ seqSys=$3
 readLen=$4
 fragMean=$5
 fragSD=$6
+foldCov=$7
 
 source activate ChIPseq_mapping
 
-#art_illumina --seqSys ${seqSys} \
-#             --in index/${genome}.fa \
-#             --paired \
-#             --len ${readLen} \
-#             --fcov 100 \
-#             --mflen ${fragMean} \
-#             --sdev ${fragSD} \
-#             --rndSeed 30 \
-#             --noALN \
-#             --out ${out}
+art_illumina --seqSys ${seqSys} \
+             --in index/${genome}.fa \
+             --paired \
+             --len ${readLen} \
+             --fcov ${foldCov} \
+             --mflen ${fragMean} \
+             --sdev ${fragSD} \
+             --rndSeed 30 \
+             --noALN \
+             --out ${out}
 
 mv ${out}1.fq ${out}1.fastq
 mv ${out}2.fq ${out}2.fastq
 
-if [ ! -f ${out}1.fastq.gz ]; then
-    gzip --best ${out}1.fastq;
-else
-    echo "skipping ${out}1.fastq";
-fi
-
-if [ ! -f ${out}2.fastq.gz ]; then
-    gzip --best ${out}2.fastq;
-else
-    echo "skipping ${out}2.fastq";
-fi
+#if [ ! -f ${out}1.fastq.gz ]; then
+#    gzip --best ${out}1.fastq;
+#else
+#    echo "skipping ${out}1.fastq";
+#fi
+#
+#if [ ! -f ${out}2.fastq.gz ]; then
+#    gzip --best ${out}2.fastq;
+#else
+#    echo "skipping ${out}2.fastq";
+#fi
 
 source deactivate
 #

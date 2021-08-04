@@ -184,7 +184,7 @@ ranLocAcc2_orthoGR <- GRanges(seqnames = ranLocAcc2_ortho_DF_bed$chr,
 # Load table of varAcc1
 varAcc1 <- fread(input = paste0(dirName, "/",
                                 substr(x = refbase, start = 22, stop = 24), ".syri.out.gz"),
-                  header = FALSE)
+                 header = FALSE)
 varAcc1 <- data.frame(varAcc1)
 colnames(varAcc1) <- c("ref_chr", "ref_start", "ref_end", "ref_seq", "que_seq",
                        "que_chr", "que_start", "que_end", "uniqueID", "parentID",
@@ -238,7 +238,6 @@ varAcc1GR <- GRanges(seqnames = varAcc1$ref_chr,
                      coverage = rep(1, dim(varAcc1)[1]))
 
 # Subset varAcc1 by class (grep-ing for "A" within "greptype" field returns all varAcc1)
-
 varAcc1class <- c(
                   "A",
                   "SNP",
@@ -295,119 +294,6 @@ varAcc1classNames <- c(
                       )
 
 
-# Load table of varAcc2
-varAcc2 <- fread(input = paste0(dirName, "/",
-                                substr(x = refbase, start = 22, stop = 24), ".syri.out.gz"),
-                  header = FALSE)
-varAcc2 <- data.frame(varAcc2)
-colnames(varAcc2) <- c("ref_chr", "ref_start", "ref_end", "ref_seq", "que_seq",
-                       "que_chr", "que_start", "que_end", "uniqueID", "parentID",
-                       "type", "copy_status")
-varAcc2$ref_start <- as.numeric(varAcc2$ref_start)
-varAcc2$ref_end <- as.numeric(varAcc2$ref_end)
-varAcc2$que_start <- as.numeric(varAcc2$que_start)
-varAcc2$que_end <- as.numeric(varAcc2$que_end)
-varAcc2$ref_chr <- gsub(pattern = "Chr", replacement = "Col_Chr",
-                        x = varAcc2$ref_chr)
-varAcc2$que_chr <- gsub(pattern = "Chr", replacement = paste0(substr(x = refbase, start = 22, stop = 24), "_Chr"),
-                        x = varAcc2$que_chr)
-
-# Remove varAcc2 that are listed more than once relative to the reference genome (Columns 1-5)
-varAcc2 <- varAcc2[-which(duplicated(varAcc2[,1:5])),]
-
-# Extract rows corresponding to varAcc2 of type varType
-if(varType == "SNP_INDEL") {
-  varAcc2 <- varAcc2[which(varAcc2$type %in% c("SNP", "INS", "DEL")),]
-} else if(!varType %in% c("all_variants")) {
-  varAcc2 <- varAcc2[which(varAcc2$type == varType),]
-}
-
-# Flip variant coordinates in wrong orientation for GRanges conversion
-varAcc2_end_start <- varAcc2[which(varAcc2$ref_end < varAcc2$ref_start),]
-varAcc2 <- varAcc2[-which(varAcc2$ref_end < varAcc2$ref_start),]
-varAcc2_start_end <- varAcc2_end_start
-varAcc2_start_end$ref_start <- varAcc2_end_start$ref_end
-varAcc2_start_end$ref_end <- varAcc2_end_start$ref_start
-varAcc2 <- rbind(varAcc2,
-                 varAcc2_start_end)
-
-# Order varAcc2 according to chromosome and coordinates
-varAcc2 <- varAcc2[ with(varAcc2, order(ref_chr, ref_start, ref_end)), ]
-
-print(paste0("Number of varAcc2 of type ", varType, ":"))
-print(nrow(varAcc2))
-
-varAcc2 <- data.frame(varAcc2,
-                      greptype = NA)
-
-varAcc2[varAcc2$type == "SNP",]$greptype <- "A_SNP"
-varAcc2[varAcc2$type == "INS",]$greptype <- "A_insertion"
-varAcc2[varAcc2$type == "DEL",]$greptype <- "A_deletion"
-
-# Convert into GRanges
-varAcc2GR <- GRanges(seqnames = varAcc2$ref_chr,
-                     ranges = IRanges(start = varAcc2$ref_start,
-                                      end = varAcc2$ref_end),
-                     strand = "*",
-                     coverage = rep(1, dim(varAcc2)[1]))
-
-# Subset varAcc2 by class (grep-ing for "A" within "greptype" field returns all varAcc2)
-
-varAcc2class <- c(
-                  "A",
-                  "SNP",
-                  "insertion",
-                  "deletion",
-                  "tion"
-                 )
-varAcc2ListGR <- mclapply(seq_along(varAcc2class), function(x) {
-  classvarAcc2 <- varAcc2[grep(varAcc2class[x], varAcc2$greptype),]
-  GRanges(seqnames = classvarAcc2$ref_chr,
-          ranges = IRanges(start = classvarAcc2$ref_start,
-                           end = classvarAcc2$ref_end),
-          strand = "*",
-          coverage = rep(1, dim(classvarAcc2)[1]))
-}, mc.cores = length(varAcc2class))
-stopifnot(length(varAcc2ListGR[[5]]) ==
-          length(varAcc2ListGR[[4]]) + length(varAcc2ListGR[[3]]))
-
-## transition
-varAcc2_transition <- varAcc2[(varAcc2$ref_seq == "A" | varAcc2$ref_seq == "G") & (varAcc2$que_seq == "G" | varAcc2$que_seq == "A") |
-                              (varAcc2$ref_seq == "C" | varAcc2$ref_seq == "T") & (varAcc2$que_seq == "T" | varAcc2$que_seq == "C"),]
-varAcc2_transition_GR <- GRanges(seqnames = varAcc2_transition$ref_chr,
-                                 ranges = IRanges(start = varAcc2_transition$ref_start,
-                                                  end = varAcc2_transition$ref_end),
-                                 strand = "*",
-                                 coverage = rep(1, dim(varAcc2_transition)[1]))
-
-## transversion
-varAcc2_transversion <- varAcc2[(varAcc2$ref_seq == "A" | varAcc2$ref_seq == "G") & (varAcc2$que_seq == "C" | varAcc2$que_seq == "T") |
-                                (varAcc2$ref_seq == "C" | varAcc2$ref_seq == "T") & (varAcc2$que_seq == "A" | varAcc2$que_seq == "G"),]
-## Below sanity check doesn't work because due to use of IUPAC ambiguity codes for some alleles
-## (e.g., found one in varAcc2[varAcc2$greptype == "A_SNP",][117920,] )
-#stopifnot((dim(varAcc2_transition)[1] +
-#           dim(varAcc2_transversion)[1]) ==
-#           dim(varAcc2[varAcc2$greptype == "A_SNP",])[1])
-varAcc2_transversion_GR <- GRanges(seqnames = varAcc2_transversion$ref_chr,
-                                   ranges = IRanges(start = varAcc2_transversion$ref_start,
-                                                    end = varAcc2_transversion$ref_end),
-                                   strand = "*",
-                                   coverage = rep(1, dim(varAcc2_transversion)[1]))
-
-# Add transitions and transversions GRanges to varAcc2ListGR
-varAcc2ListGR <- c(varAcc2ListGR,
-                   varAcc2_transition_GR,
-                   varAcc2_transversion_GR)
-varAcc2classNames <- c(
-                       "Acc2_all",
-                       "Acc2_SNP",
-                       "Acc2_insertion",
-                       "Acc2_deletion",
-                       "Acc2_indel",
-                       "Acc2_transition",
-                       "Acc2_transversion"
-                      )
-
 # Define matrix and column mean outfiles
 varAcc1featAcc1outDF <- lapply(seq_along(varAcc1classNames), function(x) {
   list(paste0(matDir, varAcc1classNames[x],
@@ -426,7 +312,6 @@ varAcc1featAcc1outDFcolMeans <- lapply(seq_along(varAcc1classNames), function(x)
               "_", genomeRegion, "_ranLocAcc1_matrix_bin", binName, "_flank", flankName, "_colMeans.tab"))
 })
 
-# Define matrix and column mean outfiles
 varAcc1featAcc2outDF <- lapply(seq_along(varAcc1classNames), function(x) {
   list(paste0(matDir, varAcc1classNames[x],
               "_variant_freq_MappedOn_", refbase, "_Acc2_Chr_genes_in_", paste0(chrName, collapse = "_"),
@@ -443,6 +328,120 @@ varAcc1featAcc2outDFcolMeans <- lapply(seq_along(varAcc1classNames), function(x)
               "_variant_freq_MappedOn_", refbase, "_Acc2_Chr_genes_in_", paste0(chrName, collapse = "_"),
               "_", genomeRegion, "_ranLocAcc2_matrix_bin", binName, "_flank", flankName, "_colMeans.tab"))
 })
+
+
+# Load table of varAcc2
+varAcc2 <- fread(input = paste0(dirName, "/",
+                                substr(x = refbase, start = 22, stop = 24), ".syri.out.gz"),
+                 header = FALSE)
+varAcc2 <- data.frame(varAcc2)
+colnames(varAcc2) <- c("ref_chr", "ref_start", "ref_end", "ref_seq", "que_seq",
+                       "que_chr", "que_start", "que_end", "uniqueID", "parentID",
+                       "type", "copy_status")
+varAcc2$ref_start <- as.numeric(varAcc2$ref_start)
+varAcc2$ref_end <- as.numeric(varAcc2$ref_end)
+varAcc2$que_start <- as.numeric(varAcc2$que_start)
+varAcc2$que_end <- as.numeric(varAcc2$que_end)
+varAcc2$ref_chr <- gsub(pattern = "Chr", replacement = "Col_Chr",
+                        x = varAcc2$ref_chr)
+varAcc2$que_chr <- gsub(pattern = "Chr", replacement = paste0(substr(x = refbase, start = 22, stop = 24), "_Chr"),
+                        x = varAcc2$que_chr)
+
+# Remove varAcc2 that are listed more than once relative to the reference genome (Columns 1-5)
+varAcc2 <- varAcc2[-which(duplicated(varAcc2[,4:8])),]
+
+# Extract rows corresponding to varAcc2 of type varType
+if(varType == "SNP_INDEL") {
+  varAcc2 <- varAcc2[which(varAcc2$type %in% c("SNP", "INS", "DEL")),]
+} else if(!varType %in% c("all_variants")) {
+  varAcc2 <- varAcc2[which(varAcc2$type == varType),]
+}
+
+# Flip variant coordinates in wrong orientation for GRanges conversion
+varAcc2_end_start <- varAcc2[which(varAcc2$que_end < varAcc2$que_start),]
+varAcc2 <- varAcc2[-which(varAcc2$que_end < varAcc2$que_start),]
+varAcc2_start_end <- varAcc2_end_start
+varAcc2_start_end$que_start <- varAcc2_end_start$que_end
+varAcc2_start_end$que_end <- varAcc2_end_start$que_start
+varAcc2 <- rbind(varAcc2,
+                 varAcc2_start_end)
+
+# Order varAcc2 according to chromosome and coordinates
+varAcc2 <- varAcc2[ with(varAcc2, order(que_chr, que_start, que_end)), ]
+
+print(paste0("Number of varAcc2 of type ", varType, ":"))
+print(nrow(varAcc2))
+
+varAcc2 <- data.frame(varAcc2,
+                      greptype = NA)
+
+varAcc2[varAcc2$type == "SNP",]$greptype <- "A_SNP"
+varAcc2[varAcc2$type == "INS",]$greptype <- "A_insertion"
+varAcc2[varAcc2$type == "DEL",]$greptype <- "A_deletion"
+
+# Convert into GRanges
+varAcc2GR <- GRanges(seqnames = varAcc2$que_chr,
+                     ranges = IRanges(start = varAcc2$que_start,
+                                      end = varAcc2$que_end),
+                     strand = "*",
+                     coverage = rep(1, dim(varAcc2)[1]))
+
+# Subset varAcc2 by class (grep-ing for "A" within "greptype" field returns all varAcc2)
+varAcc2class <- c(
+                  "A",
+                  "SNP",
+                  "insertion",
+                  "deletion",
+                  "tion"
+                 )
+varAcc2ListGR <- mclapply(seq_along(varAcc2class), function(x) {
+  classvarAcc2 <- varAcc2[grep(varAcc2class[x], varAcc2$greptype),]
+  GRanges(seqnames = classvarAcc2$que_chr,
+          ranges = IRanges(start = classvarAcc2$que_start,
+                           end = classvarAcc2$que_end),
+          strand = "*",
+          coverage = rep(1, dim(classvarAcc2)[1]))
+}, mc.cores = length(varAcc2class))
+stopifnot(length(varAcc2ListGR[[5]]) ==
+          length(varAcc2ListGR[[4]]) + length(varAcc2ListGR[[3]]))
+
+## transition
+varAcc2_transition <- varAcc2[(varAcc2$ref_seq == "A" | varAcc2$ref_seq == "G") & (varAcc2$que_seq == "G" | varAcc2$que_seq == "A") |
+                              (varAcc2$ref_seq == "C" | varAcc2$ref_seq == "T") & (varAcc2$que_seq == "T" | varAcc2$que_seq == "C"),]
+varAcc2_transition_GR <- GRanges(seqnames = varAcc2_transition$que_chr,
+                                 ranges = IRanges(start = varAcc2_transition$que_start,
+                                                  end = varAcc2_transition$que_end),
+                                 strand = "*",
+                                 coverage = rep(1, dim(varAcc2_transition)[1]))
+
+## transversion
+varAcc2_transversion <- varAcc2[(varAcc2$ref_seq == "A" | varAcc2$ref_seq == "G") & (varAcc2$que_seq == "C" | varAcc2$que_seq == "T") |
+                                (varAcc2$ref_seq == "C" | varAcc2$ref_seq == "T") & (varAcc2$que_seq == "A" | varAcc2$que_seq == "G"),]
+## Below sanity check doesn't work because due to use of IUPAC ambiguity codes for some alleles
+## (e.g., found in varAcc2[varAcc2$greptype == "A_SNP",][c(114990,117136),] )
+#stopifnot((dim(varAcc2_transition)[1] +
+#           dim(varAcc2_transversion)[1]) ==
+#           dim(varAcc2[varAcc2$greptype == "A_SNP",])[1])
+varAcc2_transversion_GR <- GRanges(seqnames = varAcc2_transversion$que_chr,
+                                   ranges = IRanges(start = varAcc2_transversion$que_start,
+                                                    end = varAcc2_transversion$que_end),
+                                   strand = "*",
+                                   coverage = rep(1, dim(varAcc2_transversion)[1]))
+
+# Add transitions and transversions GRanges to varAcc2ListGR
+varAcc2ListGR <- c(varAcc2ListGR,
+                   varAcc2_transition_GR,
+                   varAcc2_transversion_GR)
+varAcc2classNames <- c(
+                       "Acc2_all",
+                       "Acc2_SNP",
+                       "Acc2_insertion",
+                       "Acc2_deletion",
+                       "Acc2_indel",
+                       "Acc2_transition",
+                       "Acc2_transversion"
+                      )
+
 
 # Define matrix and column mean outfiles
 varAcc2featAcc2outDF <- lapply(seq_along(varAcc2classNames), function(x) {
@@ -462,7 +461,6 @@ varAcc2featAcc2outDFcolMeans <- lapply(seq_along(varAcc2classNames), function(x)
               "_", genomeRegion, "_ranLocAcc2_matrix_bin", binName, "_flank", flankName, "_colMeans.tab"))
 })
 
-# Define matrix and column mean outfiles
 varAcc2featAcc1outDF <- lapply(seq_along(varAcc2classNames), function(x) {
   list(paste0(matDir, varAcc2classNames[x],
               "_variant_freq_MappedOn_", refbase, "_Acc1_Chr_genes_in_", paste0(chrName, collapse = "_"),
@@ -479,6 +477,7 @@ varAcc2featAcc1outDFcolMeans <- lapply(seq_along(varAcc2classNames), function(x)
               "_variant_freq_MappedOn_", refbase, "_Acc1_Chr_genes_in_", paste0(chrName, collapse = "_"),
               "_", genomeRegion, "_ranLocAcc1_matrix_bin", binName, "_flank", flankName, "_colMeans.tab"))
 })
+
 
 # Function to create variant frequency matrices for
 # feature loci and random loci (incl. flanking regions)
@@ -557,7 +556,7 @@ mclapply(seq_along(varAcc1classNames), function(x) {
             outDF = varAcc1featAcc1outDF[[x]],
             outDFcolMeans = varAcc1featAcc1outDFcolMeans[[x]])
   print(paste0(varAcc1classNames[x],
-               " Acc1 variant frequency around Acc1 orthologous genes in ", chrName,
+               " variant frequency around Acc1 orthologous genes in ", paste0(chrName, collapse = "_"),
                " profile calculation complete"))
 }, mc.cores = length(varAcc1classNames))
 
@@ -572,7 +571,7 @@ mclapply(seq_along(varAcc1classNames), function(x) {
             outDF = varAcc1featAcc2outDF[[x]],
             outDFcolMeans = varAcc1featAcc2outDFcolMeans[[x]])
   print(paste0(varAcc1classNames[x],
-               " Acc1 variant frequency around Acc2 orthologous genes in ", chrName,
+               " variant frequency around Acc2 orthologous genes in ", paste0(chrName, collapse = "_"),
                " profile calculation complete"))
 }, mc.cores = length(varAcc1classNames))
 
@@ -589,7 +588,7 @@ mclapply(seq_along(varAcc2classNames), function(x) {
             outDF = varAcc2featAcc2outDF[[x]],
             outDFcolMeans = varAcc2featAcc2outDFcolMeans[[x]])
   print(paste0(varAcc2classNames[x],
-               " Acc2 variant frequency around Acc2 orthologous genes in ", chrName,
+               " variant frequency around Acc2 orthologous genes in ", paste0(chrName, collapse = "_"),
                " profile calculation complete"))
 }, mc.cores = length(varAcc2classNames))
 
@@ -604,6 +603,6 @@ mclapply(seq_along(varAcc2classNames), function(x) {
             outDF = varAcc2featAcc1outDF[[x]],
             outDFcolMeans = varAcc2featAcc1outDFcolMeans[[x]])
   print(paste0(varAcc2classNames[x],
-               " Acc2 variant frequency around Acc1 orthologous genes in ", chrName,
+               " variant frequency around Acc1 orthologous genes in ", paste0(chrName, collapse = "_"),
                " profile calculation complete"))
 }, mc.cores = length(varAcc2classNames))

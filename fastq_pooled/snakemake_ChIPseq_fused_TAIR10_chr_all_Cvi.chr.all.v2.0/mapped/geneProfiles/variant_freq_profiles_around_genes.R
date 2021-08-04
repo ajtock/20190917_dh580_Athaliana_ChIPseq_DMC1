@@ -4,10 +4,11 @@
 # contact: ajt200@cam.ac.uk
 # date: 04.08.2021
 
-# Profile varType variant frequency around genes and random loci
+# Profile varType variant frequency around orthologous genes and random loci
+# in the Acc1 (Col) and Acc2 (Cvi or Ler) genomes of the fused genome
 
 # Usage:
-# /applications/R/R-4.0.0/bin/Rscript variant_freq_profiles_around_genes.R SNP_INDEL '/data/public_data/arabidopsis/MPIPZ_Jiao_Schneeberger_2020_NatCommun/Cvi' unique 'Chr1,Chr2,Chr3,Chr4,Chr5' 2200 2000 2kb 10 10bp genomewide fused_TAIR10_chr_all_Cvi.chr.all.v2.0
+# /applications/R/R-4.0.0/bin/Rscript variant_freq_profiles_around_genes.R SNP_INDEL '/data/public_data/arabidopsis/MPIPZ_Jiao_Schneeberger_2020_NatCommun/Cvi' 'Chr1,Chr2,Chr3,Chr4,Chr5' 2200 2000 2kb 10 10bp genomewide fused_TAIR10_chr_all_Cvi.chr.all.v2.0
 
 #varType <- "SNP_INDEL"
 #dirName <- "/data/public_data/arabidopsis/MPIPZ_Jiao_Schneeberger_2020_NatCommun/Cvi"
@@ -43,61 +44,6 @@ library(parallel)
 
 matDir <- paste0("matrices_smoothed/")
 system(paste0("[ -d ", matDir, " ] || mkdir ", matDir))
-
-## Genomic definitions
-#fai <- read.table(paste0(dirName, "/", refbase, "/", refbase, ".fa.fai"), header = F)
-#chrs <- fai$V1[which(gsub(pattern = ".+_", replacement = "", x = fai$V1) %in% chrName)]
-#chrLens <- fai$V2[which(gsub(pattern = ".+_", replacement = "", x = fai$V1) %in% chrName)]
-## Pericentromeres in TAIR10 as defined in Ziolkowski et al. 2017 Genes Dev. 31: Table S26 
-#pericen <- read.table(paste0(dirName, "/", refbase, "/", refbase, ".fa.pericentromeres"), header = T)
-#pericen <- pericen[which(gsub(pattern = ".+_", replacement = "", x = pericen$chr) %in% chrName),]
-#
-## Define genomic regions to be analysed (genomeRegionGR)
-#if(genomeRegion == "arm") {
-#  genomeRegionGR <- GRanges(seqnames = rep(chrs, 2),
-#                            ranges = IRanges(start = c(rep(1, length(chrs)),
-#                                                       pericen$end+1),
-#                                             end = c(pericen$start-1,
-#                                                     chrLens)),
-#                            strand = "*")
-#  genomeRegionGR <- genomeRegionGR[which(gsub(pattern = ".+_", replacement = "", x = seqnames(genomeRegionGR)@values) %in% chrName)]
-#} else if(genomeRegion == "peri") {
-#  genomeRegionGR <- GRanges(seqnames = chrs,
-#                            ranges = IRanges(start = pericen$start,
-#                                             end = pericen$end),
-#                            strand = "*")
-#  genomeRegionGR <- genomeRegionGR[which(gsub(pattern = ".+_", replacement = "", x = seqnames(genomeRegionGR)@values) %in% chrName)]
-#} else if(genomeRegion == "genomewide") {
-#  genomeRegionGR <- GRanges(seqnames = chrs,
-#                            ranges = IRanges(start = rep(1, length(chrs)),
-#                                             end = chrLens),
-#                            strand = "*")
-#  genomeRegionGR <- genomeRegionGR[which(gsub(pattern = ".+_", replacement = "", x = seqnames(genomeRegionGR)@values) %in% chrName)]
-#} else {
-#  stop("genomeRegion is not arm, peri or genomewide")
-#}
-#
-## Define genomic regions to be masked from analyses (genomeMaskGR)
-#if(genomeRegion == "arm") {
-#  genomeMaskGR <- GRanges(seqnames = chrs,
-#                          ranges = IRanges(start = pericen$start,
-#                                           end = pericen$end),
-#                          strand = "*")
-#  genomeMaskGR <- genomeMaskGR[which(gsub(pattern = ".+_", replacement = "", x = seqnames(genomeMaskGR)@values) %in% chrName)]
-#} else if(genomeRegion == "peri") {
-#  genomeMaskGR <- GRanges(seqnames = rep(chrs, 2),
-#                          ranges = IRanges(start = c(rep(1, length(chrs)),
-#                                                     pericen$end+1),
-#                                           end = c(pericen$start-1,
-#                                                   chrLens)),
-#                          strand = "*")
-#  genomeMaskGR <- genomeMaskGR[which(gsub(pattern = ".+_", replacement = "", x = seqnames(genomeMaskGR)@values) %in% chrName)]
-#} else if(genomeRegion == "genomewide") {
-#  genomeMaskGR <- GRanges()
-#  genomeMaskGR <- genomeMaskGR[which(gsub(pattern = ".+_", replacement = "", x = seqnames(genomeMaskGR)@values) %in% chrName)]
-#} else {
-#  stop("genomeRegion is not arm, peri or genomewide")
-#}
 
 # Load featuresAcc1_ortho_DF_bed
 featuresAcc1_ortho_DF_bed <- read.table(
@@ -178,7 +124,6 @@ ranLocAcc2_orthoGR <- GRanges(seqnames = ranLocAcc2_ortho_DF_bed$chr,
                                                end = ranLocAcc2_ortho_DF_bed$end),
                               strand = ranLocAcc2_ortho_DF_bed$strand,
                               featureID = ranLocAcc2_ortho_DF_bed$ID)
-
 
 
 # Load table of varAcc1

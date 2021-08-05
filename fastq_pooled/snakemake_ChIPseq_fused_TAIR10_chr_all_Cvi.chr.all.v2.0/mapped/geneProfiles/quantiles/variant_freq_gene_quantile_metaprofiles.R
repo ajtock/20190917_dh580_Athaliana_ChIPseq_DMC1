@@ -214,7 +214,6 @@ varclassDirs <- sapply(seq_along(varclassNames), function(x) {
          "/mapped/geneProfiles/matrices_smoothed/")
 })
  
-
 ## varclass
 # featureAcc1
 varclass_featureAcc1Mats <- mclapply(seq_along(varclassNames), function(x) {

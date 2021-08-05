@@ -186,9 +186,9 @@ varAcc1GR <- GRanges(seqnames = varAcc1$ref_chr,
 varAcc1class <- c(
                   "A",
                   "SNP",
+                  "tion",
                   "insertion",
-                  "deletion",
-                  "tion"
+                  "deletion"
                  )
 varAcc1ListGR <- mclapply(seq_along(varAcc1class), function(x) {
   classvarAcc1 <- varAcc1[grep(varAcc1class[x], varAcc1$greptype),]
@@ -198,8 +198,8 @@ varAcc1ListGR <- mclapply(seq_along(varAcc1class), function(x) {
           strand = "*",
           coverage = rep(1, dim(classvarAcc1)[1]))
 }, mc.cores = length(varAcc1class))
-stopifnot(length(varAcc1ListGR[[5]]) ==
-          length(varAcc1ListGR[[4]]) + length(varAcc1ListGR[[3]]))
+stopifnot(length(varAcc1ListGR[[3]]) ==
+          length(varAcc1ListGR[[4]]) + length(varAcc1ListGR[[5]]))
 
 ## transition
 varAcc1_transition <- varAcc1[(varAcc1$ref_seq == "A" | varAcc1$ref_seq == "G") & (varAcc1$que_seq == "G" | varAcc1$que_seq == "A") |
@@ -229,11 +229,11 @@ varAcc1ListGR <- c(varAcc1ListGR,
                    varAcc1_transition_GR,
                    varAcc1_transversion_GR)
 varAcc1classNames <- c(
-                       "Acc1_all",
+                       "Acc1_SNP_INDEL",
                        "Acc1_SNP",
+                       "Acc1_INDEL",
                        "Acc1_insertion",
                        "Acc1_deletion",
-                       "Acc1_indel",
                        "Acc1_transition",
                        "Acc1_transversion"
                       )
@@ -335,9 +335,9 @@ varAcc2GR <- GRanges(seqnames = varAcc2$que_chr,
 varAcc2class <- c(
                   "A",
                   "SNP",
+                  "tion",
                   "insertion",
-                  "deletion",
-                  "tion"
+                  "deletion"
                  )
 varAcc2ListGR <- mclapply(seq_along(varAcc2class), function(x) {
   classvarAcc2 <- varAcc2[grep(varAcc2class[x], varAcc2$greptype),]
@@ -347,8 +347,8 @@ varAcc2ListGR <- mclapply(seq_along(varAcc2class), function(x) {
           strand = "*",
           coverage = rep(1, dim(classvarAcc2)[1]))
 }, mc.cores = length(varAcc2class))
-stopifnot(length(varAcc2ListGR[[5]]) ==
-          length(varAcc2ListGR[[4]]) + length(varAcc2ListGR[[3]]))
+stopifnot(length(varAcc2ListGR[[3]]) ==
+          length(varAcc2ListGR[[4]]) + length(varAcc2ListGR[[5]]))
 
 ## transition
 varAcc2_transition <- varAcc2[(varAcc2$ref_seq == "A" | varAcc2$ref_seq == "G") & (varAcc2$que_seq == "G" | varAcc2$que_seq == "A") |
@@ -378,11 +378,11 @@ varAcc2ListGR <- c(varAcc2ListGR,
                    varAcc2_transition_GR,
                    varAcc2_transversion_GR)
 varAcc2classNames <- c(
-                       "Acc2_all",
+                       "Acc2_SNP_INDEL",
                        "Acc2_SNP",
+                       "Acc2_INDEL",
                        "Acc2_insertion",
                        "Acc2_deletion",
-                       "Acc2_indel",
                        "Acc2_transition",
                        "Acc2_transversion"
                       )

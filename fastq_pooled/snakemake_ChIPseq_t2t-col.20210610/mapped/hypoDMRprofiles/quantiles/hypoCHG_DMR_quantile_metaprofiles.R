@@ -677,10 +677,10 @@ ymax_list_ChIP <- lapply(seq_along(summaryDFfeature_ChIP), function(x) {
         summaryDFfeature_ChIP[[x]][[6]]$CI_upper))
 })
 
-# Repeated ymin and ymax values for as many ChIPNames (and defined as list)
-# for consistency with above definitions and convenience
-ymin_list_ChIP <- as.list(rep(min(unlist(ymin_list_ChIP)), length(ymin_list_ChIP)))
-ymax_list_ChIP <- as.list(rep(max(unlist(ymax_list_ChIP)), length(ymax_list_ChIP)))
+## Repeated ymin and ymax values for as many ChIPNames (and defined as list)
+## for consistency with above definitions and convenience
+#ymin_list_ChIP <- as.list(rep(min(unlist(ymin_list_ChIP)), length(ymin_list_ChIP)))
+#ymax_list_ChIP <- as.list(rep(max(unlist(ymax_list_ChIP)), length(ymax_list_ChIP)))
 
 # Define legend labels
 legendLabs_featureAcc1 <- lapply(seq_along(quantileNames), function(x) {
@@ -1291,10 +1291,10 @@ ymax_list_control <- lapply(seq_along(summaryDFfeature_control), function(x) {
         summaryDFfeature_control[[x]][[6]]$CI_upper))
 })
 
-# Repeated ymin and ymax values for as many controlNames (and defined as list)
-# for consistency with above definitions and convenience
-ymin_list_control <- as.list(rep(min(unlist(ymin_list_control)), length(ymin_list_control)))
-ymax_list_control <- as.list(rep(max(unlist(ymax_list_control)), length(ymax_list_control)))
+## Repeated ymin and ymax values for as many controlNames (and defined as list)
+## for consistency with above definitions and convenience
+#ymin_list_control <- as.list(rep(min(unlist(ymin_list_control)), length(ymin_list_control)))
+#ymax_list_control <- as.list(rep(max(unlist(ymax_list_control)), length(ymax_list_control)))
 
 # Define legend labels
 legendLabs_featureAcc1 <- lapply(seq_along(quantileNames), function(x) {
@@ -1905,10 +1905,10 @@ ymax_list_log2ChIP <- lapply(seq_along(summaryDFfeature_log2ChIP), function(x) {
         summaryDFfeature_log2ChIP[[x]][[6]]$CI_upper))
 })
 
-# Repeated ymin and ymax values for as many log2ChIPNames (and defined as list)
-# for consistency with above definitions and convenience
-ymin_list_log2ChIP <- as.list(rep(min(unlist(ymin_list_log2ChIP)), length(ymin_list_log2ChIP)))
-ymax_list_log2ChIP <- as.list(rep(max(unlist(ymax_list_log2ChIP)), length(ymax_list_log2ChIP)))
+## Repeated ymin and ymax values for as many log2ChIPNames (and defined as list)
+## for consistency with above definitions and convenience
+#ymin_list_log2ChIP <- as.list(rep(min(unlist(ymin_list_log2ChIP)), length(ymin_list_log2ChIP)))
+#ymax_list_log2ChIP <- as.list(rep(max(unlist(ymax_list_log2ChIP)), length(ymax_list_log2ChIP)))
 
 # Define legend labels
 legendLabs_featureAcc1 <- lapply(seq_along(quantileNames), function(x) {

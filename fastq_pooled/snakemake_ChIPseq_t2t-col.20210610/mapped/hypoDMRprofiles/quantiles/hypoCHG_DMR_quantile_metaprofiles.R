@@ -75,8 +75,7 @@ library(extrafont)
 library(viridis)
 
 outDir <- paste0(paste0(chrName, collapse = "_"),
-                 "/quantiles_", genomeRegion, "_by_log2_fold_change_at_hypo", context,
-                 "_", orderRegion, "/")
+                 "/quantiles_", genomeRegion, "_by_", context, "_log2_fold_change_at_hypo", context, "_", orderRegion, "/")
 plotDir <- paste0(outDir, "plots/")
 system(paste0("[ -d ", outDir, " ] || mkdir -p ", outDir))
 system(paste0("[ -d ", plotDir, " ] || mkdir -p ", plotDir))
@@ -524,15 +523,15 @@ ChIP_mats_quantiles <- mclapply(seq_along(ChIP_featureAcc1Mats), function(x) {
        }),
        # featureAcc2 quantiles
        lapply(1:quantiles, function(k) {
-         ChIP_featureAcc2Mats[[x]][quantileIndicesAcc1[[k]],]
+         ChIP_featureAcc2Mats[[x]][quantileIndicesAcc2[[k]],]
        }),
        # featureAcc2 random groupings
        lapply(1:quantiles, function(k) {
-         ChIP_featureAcc2Mats[[x]][randomPCIndicesAcc1[[k]],]
+         ChIP_featureAcc2Mats[[x]][randomPCIndicesAcc2[[k]],]
        }),
        # ranLocAcc2 groupings
        lapply(1:quantiles, function(k) {
-         ChIP_ranLocAcc2Mats[[x]][quantileIndicesAcc1[[k]],]
+         ChIP_ranLocAcc2Mats[[x]][quantileIndicesAcc2[[k]],]
        })
       ) 
 }, mc.cores = length(ChIP_featureAcc1Mats))
@@ -1084,9 +1083,9 @@ ggObjGA_combined <- grid.arrange(grobs = c(
                                                        ((length(c(ChIPNamesPlot))*5)+1):(length(c(ChIPNamesPlot))*6)
                                                       ))
 ggsave(paste0(plotDir,
-              "ChIP_", align, "_avgProfiles_around_featuresAcc1_ortho_", quantiles, "quantiles",
-              "_", genomeRegion, "_by_", varType, "_freq_in_", orderRegion,
-              "_of_Acc1_Chr_genes_in_", refbase, "_",
+              "ChIP_", align, "_avgProfiles_around_features_", quantiles, "quantiles",
+              "_", genomeRegion, "_by_", context, "_log2_fold_change_at_hypo", context, "_", orderRegion,
+              "_in_", refbase, "_",
               paste0(chrName, collapse = "_"), ".pdf"),
        plot = ggObjGA_combined,
        height = 6.5*length(c(ChIPNamesPlot)), width = 7*6, limitsize = FALSE)
@@ -1138,15 +1137,15 @@ control_mats_quantiles <- mclapply(seq_along(control_featureAcc1Mats), function(
        }),
        # featureAcc2 quantiles
        lapply(1:quantiles, function(k) {
-         control_featureAcc2Mats[[x]][quantileIndicesAcc1[[k]],]
+         control_featureAcc2Mats[[x]][quantileIndicesAcc2[[k]],]
        }),
        # featureAcc2 random groupings
        lapply(1:quantiles, function(k) {
-         control_featureAcc2Mats[[x]][randomPCIndicesAcc1[[k]],]
+         control_featureAcc2Mats[[x]][randomPCIndicesAcc2[[k]],]
        }),
        # ranLocAcc2 groupings
        lapply(1:quantiles, function(k) {
-         control_ranLocAcc2Mats[[x]][quantileIndicesAcc1[[k]],]
+         control_ranLocAcc2Mats[[x]][quantileIndicesAcc2[[k]],]
        })
       ) 
 }, mc.cores = length(control_featureAcc1Mats))
@@ -1698,9 +1697,9 @@ ggObjGA_combined <- grid.arrange(grobs = c(
                                                        ((length(c(controlNamesPlot))*5)+1):(length(c(controlNamesPlot))*6)
                                                       ))
 ggsave(paste0(plotDir,
-              "control_", align, "_avgProfiles_around_featuresAcc1_ortho_", quantiles, "quantiles",
-              "_", genomeRegion, "_by_", varType, "_freq_in_", orderRegion,
-              "_of_Acc1_Chr_genes_in_", refbase, "_",
+              "control_", align, "_avgProfiles_around_features_", quantiles, "quantiles",
+              "_", genomeRegion, "_by_", context, "_log2_fold_change_at_hypo", context, "_", orderRegion,
+              "_in_", refbase, "_",
               paste0(chrName, collapse = "_"), ".pdf"),
        plot = ggObjGA_combined,
        height = 6.5*length(c(controlNamesPlot)), width = 7*6, limitsize = FALSE)
@@ -1722,17 +1721,17 @@ gc()
 # Add column names
 for(x in seq_along(log2ChIP_featureAcc1Mats)) {
   colnames(log2ChIP_featureAcc1Mats[[x]]) <- c(paste0("u", 1:(upstream/binSize)),
-                                           paste0("t", ((upstream/binSize)+1):((upstream+bodyLength)/binSize)),
-                                           paste0("d", (((upstream+bodyLength)/binSize)+1):(((upstream+bodyLength)/binSize)+(downstream/binSize))))
+                                               paste0("t", ((upstream/binSize)+1):((upstream+bodyLength)/binSize)),
+                                               paste0("d", (((upstream+bodyLength)/binSize)+1):(((upstream+bodyLength)/binSize)+(downstream/binSize))))
   colnames(log2ChIP_ranLocAcc1Mats[[x]]) <- c(paste0("u", 1:(upstream/binSize)),
-                                          paste0("t", ((upstream/binSize)+1):((upstream+bodyLength)/binSize)),
-                                          paste0("d", (((upstream+bodyLength)/binSize)+1):(((upstream+bodyLength)/binSize)+(downstream/binSize))))
+                                              paste0("t", ((upstream/binSize)+1):((upstream+bodyLength)/binSize)),
+                                              paste0("d", (((upstream+bodyLength)/binSize)+1):(((upstream+bodyLength)/binSize)+(downstream/binSize))))
   colnames(log2ChIP_featureAcc2Mats[[x]]) <- c(paste0("u", 1:(upstream/binSize)),
-                                           paste0("t", ((upstream/binSize)+1):((upstream+bodyLength)/binSize)),
-                                           paste0("d", (((upstream+bodyLength)/binSize)+1):(((upstream+bodyLength)/binSize)+(downstream/binSize))))
+                                               paste0("t", ((upstream/binSize)+1):((upstream+bodyLength)/binSize)),
+                                               paste0("d", (((upstream+bodyLength)/binSize)+1):(((upstream+bodyLength)/binSize)+(downstream/binSize))))
   colnames(log2ChIP_ranLocAcc2Mats[[x]]) <- c(paste0("u", 1:(upstream/binSize)),
-                                          paste0("t", ((upstream/binSize)+1):((upstream+bodyLength)/binSize)),
-                                          paste0("d", (((upstream+bodyLength)/binSize)+1):(((upstream+bodyLength)/binSize)+(downstream/binSize))))
+                                              paste0("t", ((upstream/binSize)+1):((upstream+bodyLength)/binSize)),
+                                              paste0("d", (((upstream+bodyLength)/binSize)+1):(((upstream+bodyLength)/binSize)+(downstream/binSize))))
 }
 
 # Subdivide coverage matrices into above-defined quantiles and random groupings
@@ -1752,15 +1751,15 @@ log2ChIP_mats_quantiles <- mclapply(seq_along(log2ChIP_featureAcc1Mats), functio
        }),
        # featureAcc2 quantiles
        lapply(1:quantiles, function(k) {
-         log2ChIP_featureAcc2Mats[[x]][quantileIndicesAcc1[[k]],]
+         log2ChIP_featureAcc2Mats[[x]][quantileIndicesAcc2[[k]],]
        }),
        # featureAcc2 random groupings
        lapply(1:quantiles, function(k) {
-         log2ChIP_featureAcc2Mats[[x]][randomPCIndicesAcc1[[k]],]
+         log2ChIP_featureAcc2Mats[[x]][randomPCIndicesAcc2[[k]],]
        }),
        # ranLocAcc2 groupings
        lapply(1:quantiles, function(k) {
-         log2ChIP_ranLocAcc2Mats[[x]][quantileIndicesAcc1[[k]],]
+         log2ChIP_ranLocAcc2Mats[[x]][quantileIndicesAcc2[[k]],]
        })
       ) 
 }, mc.cores = length(log2ChIP_featureAcc1Mats))
@@ -2312,9 +2311,9 @@ ggObjGA_combined <- grid.arrange(grobs = c(
                                                        ((length(c(log2ChIPNamesPlot))*5)+1):(length(c(log2ChIPNamesPlot))*6)
                                                       ))
 ggsave(paste0(plotDir,
-              "log2ChIPcontrol_", align, "_avgProfiles_around_featuresAcc1_ortho_", quantiles, "quantiles",
-              "_", genomeRegion, "_by_", varType, "_freq_in_", orderRegion,
-              "_of_Acc1_Chr_genes_in_", refbase, "_",
+              "log2ChIPcontrol_", align, "_avgProfiles_around_features_", quantiles, "quantiles",
+              "_", genomeRegion, "_by_", context, "_log2_fold_change_at_hypo", context, "_", orderRegion,
+              "_in_", refbase, "_",
               paste0(chrName, collapse = "_"), ".pdf"),
        plot = ggObjGA_combined,
        height = 6.5*length(c(log2ChIPNamesPlot)), width = 7*6, limitsize = FALSE)

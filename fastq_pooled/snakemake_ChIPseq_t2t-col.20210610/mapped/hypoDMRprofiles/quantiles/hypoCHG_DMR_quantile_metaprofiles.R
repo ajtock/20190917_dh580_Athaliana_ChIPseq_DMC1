@@ -10,7 +10,7 @@
 # decreasing log2 fold change in DNA methylation (log2((WT+0.001)/(mutant+0.001))) or randomly
 
 # Usage:
-# /applications/R/R-4.0.0/bin/Rscript hypoCHG_DMR_quantile_metaprofiles.R CHG '/home/ajt200/analysis/BSseq_leaf_Stroud_Jacobsen_2013_Cell_2014_NSMB' both 'Chr1,Chr2,Chr3,Chr4,Chr5' 1000 2000 2kb '2 kb' 10 10bp genes genomewide 6 t2t-col.20210610 '0.02,0.96'
+# /applications/R/R-4.0.0/bin/Rscript hypoCHG_DMR_quantile_metaprofiles.R CHG '/home/ajt200/analysis/BSseq_leaf_Stroud_Jacobsen_2013_Cell_2014_NSMB' both 'Chr1,Chr2,Chr3,Chr4,Chr5' 1000 2000 2kb '2 kb' 10 10bp DMRs genomewide 6 t2t-col.20210610 '0.02,0.96'
 
 #context <- "CHG"
 #dirName <- "/home/ajt200/analysis/BSseq_leaf_Stroud_Jacobsen_2013_Cell_2014_NSMB"
@@ -89,10 +89,13 @@ ranFeatAcc2NamePlot <- "Random quantiles (kss)"
 ranLocAcc2NamePlot <- "RanLoc quantiles (kss)"
 
 # Define quantile colours
-quantileColours <- rev(viridis(quantiles))
-quantileColours[1] <- "orange"
-#quantileColours <- rev(plasma(quantiles))
-#quantileColours[1] <- "gold"
+if(context %in% c("CHG")) {
+  quantileColours <- rev(viridis(quantiles))
+  quantileColours[1] <- "orange"
+} else if(context %in% c("CHH")) {
+  quantileColours <- rev(plasma(quantiles))
+  quantileColours[1] <- "gold"
+}
 
 # Define feature start and end labels for plotting
 featureStartLab <- "Start"
@@ -263,18 +266,18 @@ ChIPNamesDir <- c(
                   rep(paste0("160518_Kyuha_SPO11oligos/WT/snakemake_SPO11oligos_", refbase), 3)
                  )
 log2ChIPNamesPlot <- c(
-                       "(cmt3 DMC1 Rep1/WT DMC1 Rep2)",
-                       "(kss DMC1 Rep1/WT DMC1 Rep2)",
-                       "(WT DMC1 Rep1/WT input)",
-                       "(WT DMC1 Rep2/WT input)",
-                       "(kss SPO11-1 Rep1/WT SPO11-1 Rep3)",
-                       "(kss SPO11-1 Rep2/WT SPO11-1 Rep3)",
-                       "(met1 SPO11-1 Rep1/WT SPO11-1 Rep3)",
-                       "(met1 SPO11-1 Rep2/WT SPO11-1 Rep3)",
-                       "(met1 SPO11-1 Rep3/WT SPO11-1 Rep3)",
-                       "(WT SPO11-1 Rep1/WT gDNA)",
-                       "(WT SPO11-1 Rep2/WT gDNA)",
-                       "(WT SPO11-1 Rep3/WT gDNA)"
+                       "(cmt3/WT) DMC1",
+                       "(kss/WT) DMC1",
+                       "(WT Rep1/input) DMC1",
+                       "(WT Rep2/input) DMC1",
+                       "(kss Rep1/WT) SPO11-1",
+                       "(kss Rep2/WT) SPO11-1",
+                       "(met1 Rep1/WT) SPO11-1",
+                       "(met1 Rep2/WT) SPO11-1",
+                       "(met1 Rep3/WT) SPO11-1",
+                       "(WT Rep1/gDNA) SPO11-1",
+                       "(WT Rep2/gDNA) SPO11-1",
+                       "(WT Rep3/gDNA) SPO11-1"
                       )
 ChIPNamesPlot <- c(
                    "cmt3 DMC1 Rep1",

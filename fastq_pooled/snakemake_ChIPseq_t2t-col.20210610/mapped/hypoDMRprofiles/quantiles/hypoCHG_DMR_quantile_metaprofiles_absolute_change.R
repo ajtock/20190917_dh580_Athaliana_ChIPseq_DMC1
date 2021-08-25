@@ -10,7 +10,7 @@
 # decreasing log2 fold change in DNA methylation (log2((WT+0.001)/(mutant+0.001))) or randomly
 
 # Usage:
-# /applications/R/R-4.0.0/bin/Rscript hypoCHG_DMR_quantile_metaprofiles.R CHG '/home/ajt200/analysis/BSseq_leaf_Stroud_Jacobsen_2013_Cell_2014_NSMB' both 'Chr1,Chr2,Chr3,Chr4,Chr5' 1000 2000 2kb '2 kb' 10 10bp genes genomewide 6 t2t-col.20210610 '0.02,0.96'
+# /applications/R/R-4.0.0/bin/Rscript hypoCHG_DMR_quantile_metaprofiles_absolute_change.R CHG '/home/ajt200/analysis/BSseq_leaf_Stroud_Jacobsen_2013_Cell_2014_NSMB' both 'Chr1,Chr2,Chr3,Chr4,Chr5' 1000 2000 2kb '2 kb' 10 10bp genes genomewide 6 t2t-col.20210610 '0.02,0.96'
 
 #context <- "CHG"
 #dirName <- "/home/ajt200/analysis/BSseq_leaf_Stroud_Jacobsen_2013_Cell_2014_NSMB"
@@ -75,7 +75,7 @@ library(extrafont)
 library(viridis)
 
 outDir <- paste0(paste0(chrName, collapse = "_"),
-                 "/quantiles_", genomeRegion, "_by_", context, "_log2_fold_change_at_hypo", context, "_", orderRegion, "/")
+                 "/quantiles_", genomeRegion, "_by_", context, "_absolute_change_at_hypo", context, "_", orderRegion, "/")
 plotDir <- paste0(outDir, "plots/")
 system(paste0("[ -d ", outDir, " ] || mkdir -p ", outDir))
 system(paste0("[ -d ", plotDir, " ] || mkdir -p ", plotDir))
@@ -130,7 +130,7 @@ rm(featuresAcc1_ortho_DF_bed); gc()
 
 # Get row indices for each feature quantile
 quantileIndicesAcc1 <- lapply(1:quantiles, function(k) {
-  which(featuresAcc1_ortho_DF$l2fc_quantile == paste0("Quantile ", k))
+  which(featuresAcc1_ortho_DF$ac_quantile == paste0("Quantile ", k))
 })
 
 ## Random feature quantiles
@@ -152,7 +152,7 @@ randomPCIndicesAcc1 <- lapply(1:quantiles, function(k) {
   # Define seed so that random selections are reproducible
   set.seed(93750174)
     randomPCfeatureskChr <- selectRandomFeatures(features = featuresAcc1_ortho_DF[featuresAcc1_ortho_DF$seqid == chrs[i],],
-                                                 n = dim(featuresAcc1_ortho_DF[featuresAcc1_ortho_DF$l2fc_quantile == paste0("Quantile ", k) &
+                                                 n = dim(featuresAcc1_ortho_DF[featuresAcc1_ortho_DF$ac_quantile == paste0("Quantile ", k) &
                                                                                featuresAcc1_ortho_DF$seqid == chrs[i],])[1])
     randomPCIndicesAcc1k <- c(randomPCIndicesAcc1k, as.integer(rownames(randomPCfeatureskChr)))
   }
@@ -201,7 +201,7 @@ rm(featuresAcc2_ortho_DF_bed); gc()
 
 # Get row indices for each feature quantile
 quantileIndicesAcc2 <- lapply(1:quantiles, function(k) {
-  which(featuresAcc2_ortho_DF$l2fc_quantile == paste0("Quantile ", k))
+  which(featuresAcc2_ortho_DF$ac_quantile == paste0("Quantile ", k))
 })
 
 ## Random feature quantiles
@@ -223,7 +223,7 @@ randomPCIndicesAcc2 <- lapply(1:quantiles, function(k) {
   # Define seed so that random selections are reproducible
   set.seed(93750174)
     randomPCfeatureskChr <- selectRandomFeatures(features = featuresAcc2_ortho_DF[featuresAcc2_ortho_DF$seqid == chrs[i],],
-                                                 n = dim(featuresAcc2_ortho_DF[featuresAcc2_ortho_DF$l2fc_quantile == paste0("Quantile ", k) &
+                                                 n = dim(featuresAcc2_ortho_DF[featuresAcc2_ortho_DF$ac_quantile == paste0("Quantile ", k) &
                                                                                featuresAcc2_ortho_DF$seqid == chrs[i],])[1])
     randomPCIndicesAcc2k <- c(randomPCIndicesAcc2k, as.integer(rownames(randomPCfeatureskChr)))
   }
@@ -1084,7 +1084,7 @@ ggObjGA_combined <- grid.arrange(grobs = c(
                                                       ))
 ggsave(paste0(plotDir,
               "ChIP_", align, "_avgProfiles_around_features_", quantiles, "quantiles",
-              "_", genomeRegion, "_by_", context, "_log2_fold_change_at_hypo", context, "_", orderRegion,
+              "_", genomeRegion, "_by_", context, "_absolute_change_at_hypo", context, "_", orderRegion,
               "_in_", refbase, "_",
               paste0(chrName, collapse = "_"), ".pdf"),
        plot = ggObjGA_combined,
@@ -1698,7 +1698,7 @@ ggObjGA_combined <- grid.arrange(grobs = c(
                                                       ))
 ggsave(paste0(plotDir,
               "control_", align, "_avgProfiles_around_features_", quantiles, "quantiles",
-              "_", genomeRegion, "_by_", context, "_log2_fold_change_at_hypo", context, "_", orderRegion,
+              "_", genomeRegion, "_by_", context, "_absolute_change_at_hypo", context, "_", orderRegion,
               "_in_", refbase, "_",
               paste0(chrName, collapse = "_"), ".pdf"),
        plot = ggObjGA_combined,
@@ -2312,7 +2312,7 @@ ggObjGA_combined <- grid.arrange(grobs = c(
                                                       ))
 ggsave(paste0(plotDir,
               "log2ChIPcontrol_", align, "_avgProfiles_around_features_", quantiles, "quantiles",
-              "_", genomeRegion, "_by_", context, "_log2_fold_change_at_hypo", context, "_", orderRegion,
+              "_", genomeRegion, "_by_", context, "_absolute_change_at_hypo", context, "_", orderRegion,
               "_in_", refbase, "_",
               paste0(chrName, collapse = "_"), ".pdf"),
        plot = ggObjGA_combined,

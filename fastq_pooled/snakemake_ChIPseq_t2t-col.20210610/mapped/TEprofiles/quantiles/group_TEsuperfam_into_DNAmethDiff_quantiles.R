@@ -171,7 +171,7 @@ if(length(lib_featureMat) > 1) {
   lib_featureMat <- lib_featureMat[[1]]
 }
 
-stopifnot(identical(nrow(feautures), nrow(lib_featureMat)))
+stopifnot(identical(nrow(feature), nrow(lib_featureMat)))
 
 # ranLoc
 lib_ranLocMat <- lapply(seq_along(libName), function(w) {
@@ -207,6 +207,7 @@ if(length(lib_ranLocMat) > 1) {
   lib_ranLocMat <- lib_ranLocMat[[1]]
 }
 
+stopifnot(identical(nrow(ranLoc), nrow(lib_ranLocMat)))
 
 ## control
 # feature
@@ -243,6 +244,8 @@ if(length(control_featureMat) > 1) {
   control_featureMat <- control_featureMat[[1]]
 }
 
+stopifnot(identical(nrow(feature), nrow(control_featureMat)))
+
 # ranLoc
 control_ranLocMat <- lapply(seq_along(controlName), function(w) {
   mclapply(seq_along(chrName), function(x) {
@@ -276,6 +279,9 @@ if(length(control_ranLocMat) > 1) {
 } else {
   control_ranLocMat <- control_ranLocMat[[1]]
 }
+
+stopifnot(identical(nrow(ranLoc), nrow(control_ranLocMat)))
+
 
 # Get sortRegion
 if(sortRegion == "promoters") {

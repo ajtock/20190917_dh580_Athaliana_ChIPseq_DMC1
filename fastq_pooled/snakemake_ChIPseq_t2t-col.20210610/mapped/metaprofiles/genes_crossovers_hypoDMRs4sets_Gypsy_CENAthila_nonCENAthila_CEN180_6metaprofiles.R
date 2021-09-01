@@ -9,7 +9,7 @@
 # for different feature sets
 
 # Usage:
-# /applications/R/R-4.0.0/bin/Rscript genes_crossovers_hypoDMRs4sets_Gypsy_CENAthila_nonCENAthila_CEN180_4metaprofiles.R 'Chr1,Chr2,Chr3,Chr4,Chr5' both 2000 '2kb' 10 10bp '0.02,0.96' 'Col_DMC1_V5_Rep1_ChIP,Col_DMC1_V5_Rep2_ChIP,cmt3_DMC1_V5_Rep1_ChIP,kss_DMC1_V5_Rep1_ChIP' '20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610' 'WT DMC1 Rep1,WT DMC1 Rep2,cmt3 DMC1,kss DMC1' 'dodgerblue1,navy,green2,darkorange' 'ChIP' Gypsy_LTR
+# /applications/R/R-4.0.0/bin/Rscript genes_crossovers_hypoDMRs4sets_Gypsy_CENAthila_nonCENAthila_CEN180_5metaprofiles.R 'Chr1,Chr2,Chr3,Chr4,Chr5' both 2000 '2kb' 10 10bp '0.02,0.96' 'WT_SPO11oligos_Rep1,WT_SPO11oligos_Rep2,WT_SPO11oligos_Rep3,met1_SPO11oligos_Rep1,met1_SPO11oligos_Rep2,met1_SPO11oligos_Rep3' '160518_Kyuha_SPO11oligos/WT/snakemake_SPO11oligos_t2t-col.20210610,160518_Kyuha_SPO11oligos/WT/snakemake_SPO11oligos_t2t-col.20210610,160518_Kyuha_SPO11oligos/WT/snakemake_SPO11oligos_t2t-col.20210610,160518_Kyuha_SPO11oligos/met1/snakemake_SPO11oligos_t2t-col.20210610,160518_Kyuha_SPO11oligos/met1/snakemake_SPO11oligos_t2t-col.20210610,160518_Kyuha_SPO11oligos/met1/snakemake_SPO11oligos_t2t-col.20210610' 'WT SPO11-1 Rep1,WT SPO11-1 Rep2,WT SPO11-1 Rep3,met1 SPO11-1 Rep1,met1 SPO11-1 Rep2,met1 SPO11-1 Rep3' 'navy,blue,deepskyblue,magenta4,magenta3,magenta' 'SPO11-1-oligos' Gypsy_LTR
 
 #chrName <- unlist(strsplit("Chr1,Chr2,Chr3,Chr4,Chr5",
 #                           split = ","))
@@ -999,6 +999,8 @@ annotation_custom(legendLabs[[1]]) +
 annotation_custom(legendLabs[[2]]) +
 annotation_custom(legendLabs[[3]]) +
 annotation_custom(legendLabs[[4]]) +
+annotation_custom(legendLabs[[5]]) +
+annotation_custom(legendLabs[[6]]) +
 theme_bw() +
 theme(
       axis.ticks = element_line(size = 1.0, colour = "black"),
@@ -1504,7 +1506,7 @@ ggObjGA_combined <- grid.arrange(grobs = list(
                                                       ))
 ggsave(paste0(plotDir,
               "log2ChIPcontrol_",
-              paste0(log2ChIPNames, collapse = "_"),
+              paste0(log2ChIPNames[c(1, 4)], collapse = "_"),
               "_avgProfiles_around",
               "_genes_ranLoc_COs_hypoDMRs4sets_", TEsf, "_CENAthila_nonCENAthila_CEN180_in_t2t-col.20210610_",
               paste0(chrName, collapse = "_"), "_", align, ".pdf"),
@@ -1833,6 +1835,8 @@ annotation_custom(legendLabs[[1]]) +
 annotation_custom(legendLabs[[2]]) +
 annotation_custom(legendLabs[[3]]) +
 annotation_custom(legendLabs[[4]]) +
+annotation_custom(legendLabs[[5]]) +
+annotation_custom(legendLabs[[6]]) +
 theme_bw() +
 theme(
       axis.ticks = element_line(size = 1.0, colour = "black"),
@@ -2338,7 +2342,7 @@ ggObjGA_combined <- grid.arrange(grobs = list(
                                                       ))
 ggsave(paste0(plotDir,
               "ChIP_",
-              paste0(ChIPNames, collapse = "_"),
+              paste0(ChIPNames[c(1, 4)], collapse = "_"),
               "_avgProfiles_around",
               "_genes_ranLoc_COs_hypoDMRs4sets_", TEsf, "_CENAthila_nonCENAthila_CEN180_in_t2t-col.20210610_",
               paste0(chrName, collapse = "_"), "_", align, ".pdf"),
@@ -3170,7 +3174,7 @@ ggObjGA_combined <- grid.arrange(grobs = list(
                                                       ))
 ggsave(paste0(plotDir,
               "control_",
-              paste0(controlNames, collapse = "_"),
+              paste0(controlNames[c(1, 4)], collapse = "_"),
               "_avgProfiles_around",
               "_genes_ranLoc_COs_hypoDMRs4sets_", TEsf, "_CENAthila_nonCENAthila_CEN180_in_t2t-col.20210610_",
               paste0(chrName, collapse = "_"), "_", align, ".pdf"),

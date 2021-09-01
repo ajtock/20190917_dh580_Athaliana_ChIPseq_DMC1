@@ -9,7 +9,7 @@
 # for different feature sets
 
 # Usage:
-# /applications/R/R-4.0.0/bin/Rscript genes_crossovers_hypoDMRs4sets_Gypsy_CENAthila_nonCENAthila_CEN180_4metaprofiles.R 'Chr1,Chr2,Chr3,Chr4,Chr5' both 2000 '2kb' 10 10bp '0.02,0.96' 'Col_DMC1_V5_Rep1_ChIP,Col_DMC1_V5_Rep2_ChIP,cmt3_DMC1_V5_Rep1_ChIP,kss_DMC1_V5_Rep1_ChIP' '20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610' 'WT DMC1 Rep1,WT DMC1 Rep2,cmt3 DMC1,kss DMC1' 'dodgerblue1,navy,green2,darkorange' 'ChIP' Gypsy_LTR
+# /applications/R/R-4.0.0/bin/Rscript genes_crossovers_hypoDMRs4sets_Gypsy_CENAthila_nonCENAthila_CEN180_3metaprofiles.R 'Chr1,Chr2,Chr3,Chr4,Chr5' both 2000 '2kb' 10 10bp '0.02,0.96' 'Col_DMC1_V5_Rep2_ChIP,cmt3_DMC1_V5_Rep1_ChIP,kss_DMC1_V5_Rep1_ChIP' '20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610' 'WT DMC1,cmt3 DMC1,kss DMC1' 'navy,green2,darkorange' 'ChIP' Gypsy_LTR
 
 #chrName <- unlist(strsplit("Chr1,Chr2,Chr3,Chr4,Chr5",
 #                           split = ","))
@@ -31,15 +31,15 @@
 ## bottom left
 #legendPos <- as.numeric(unlist(strsplit("0.02,0.40",
 #                                        split = ",")))
-#ChIPNames <- unlist(strsplit("Col_DMC1_V5_Rep1_ChIP,Col_DMC1_V5_Rep2_ChIP,cmt3_DMC1_V5_Rep1_ChIP,kss_DMC1_V5_Rep1_ChIP",
+#ChIPNames <- unlist(strsplit("Col_DMC1_V5_Rep2_ChIP,cmt3_DMC1_V5_Rep1_ChIP,kss_DMC1_V5_Rep1_ChIP",
 #                             split = ","))
-#ChIPNamesDir <- unlist(strsplit("20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610",
+#ChIPNamesDir <- unlist(strsplit("20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610,20190917_dh580_Athaliana_ChIPseq_DMC1/fastq_pooled/snakemake_ChIPseq_t2t-col.20210610",
 #                                split = ","))
-#ChIPNamesPlot <- unlist(strsplit("WT DMC1 Rep1,WT DMC1 Rep2,cmt3 DMC1,kss DMC1",
+#ChIPNamesPlot <- unlist(strsplit("WT DMC1,cmt3 DMC1,kss DMC1",
 #                                 split = ","))
-#ChIPColours <- unlist(strsplit("dodgerblue1,navy,green2,darkorange",
+#ChIPColours <- unlist(strsplit("navy,green2,darkorange",
 #                               split = ","))
-#yLabPlot <- "ChIP"
+#yLabPlot <- "DMC1 ChIP"
 #TEsf <- "Gypsy_LTR"
 
 args <- commandArgs(trailingOnly = T)
@@ -998,7 +998,6 @@ labs(x = "",
 annotation_custom(legendLabs[[1]]) +
 annotation_custom(legendLabs[[2]]) +
 annotation_custom(legendLabs[[3]]) +
-annotation_custom(legendLabs[[4]]) +
 theme_bw() +
 theme(
       axis.ticks = element_line(size = 1.0, colour = "black"),
@@ -1832,7 +1831,6 @@ labs(x = "",
 annotation_custom(legendLabs[[1]]) +
 annotation_custom(legendLabs[[2]]) +
 annotation_custom(legendLabs[[3]]) +
-annotation_custom(legendLabs[[4]]) +
 theme_bw() +
 theme(
       axis.ticks = element_line(size = 1.0, colour = "black"),

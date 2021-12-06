@@ -403,7 +403,7 @@ if(orderRegion == "bodies") {
   featOrReAcc1_orthoGR <- promoters(featuresAcc1_orthoGR, upstream = 1000, downstream = 0)
 } else if(orderRegion == "terminators") {
   # Obtain 1000 bp downstream of end coordinates
-  source("/projects/ajt200/Rfunctions/TTSplus.R")
+  source("/projects/meiosis/ajt200/Rfunctions/TTSplus.R")
   featOrReAcc1_orthoGR <- TTSplus(featuresAcc1_orthoGR, upstream = -1, downstream = 1000)
 } else if(orderRegion == "genes") {
   featOrReAcc1_orthoGR <- GRanges(seqnames = paste0("Col_", featuresAcc1_ortho$seqid),
@@ -470,7 +470,7 @@ if(orderRegion == "bodies") {
   ranLORAcc1GR <- promoters(ranLocAcc1GR, upstream = 1000, downstream = 0)
 } else if(orderRegion == "terminators") {
   # Obtain 1000 bp downstream of end coordinates
-  source("/projects/ajt200/Rfunctions/TTSplus.R")
+  source("/projects/meiosis/ajt200/Rfunctions/TTSplus.R")
   ranLORAcc1GR <- TTSplus(ranLocAcc1GR, upstream = -1, downstream = 1000)
 } else if(orderRegion == "genes") {
   ranLORAcc1GR <- GRanges(seqnames = as.character(seqnames(ranLocAcc1GR)),
@@ -647,7 +647,7 @@ if(orderRegion == "bodies") {
   featOrReAcc2_orthoGR <- promoters(featuresAcc2_orthoGR, upstream = 1000, downstream = 0)
 } else if(orderRegion == "terminators") {
   # Obtain 1000 bp downstream of end coordinates
-  source("/projects/ajt200/Rfunctions/TTSplus.R")
+  source("/projects/meiosis/ajt200/Rfunctions/TTSplus.R")
   featOrReAcc2_orthoGR <- TTSplus(featuresAcc2_orthoGR, upstream = -1, downstream = 1000)
 } else if(orderRegion == "genes") {
   featOrReAcc2_orthoGR <- GRanges(seqnames = paste0(substr(x = refbase, start = 22, stop = 24), "_", featuresAcc2_ortho$seqid),
@@ -714,7 +714,7 @@ if(orderRegion == "bodies") {
   ranLORAcc2GR <- promoters(ranLocAcc2GR, upstream = 1000, downstream = 0)
 } else if(orderRegion == "terminators") {
   # Obtain 1000 bp downstream of end coordinates
-  source("/projects/ajt200/Rfunctions/TTSplus.R")
+  source("/projects/meiosis/ajt200/Rfunctions/TTSplus.R")
   ranLORAcc2GR <- TTSplus(ranLocAcc2GR, upstream = -1, downstream = 1000)
 } else if(orderRegion == "genes") {
   ranLORAcc2GR <- GRanges(seqnames = as.character(seqnames(ranLocAcc2GR)),

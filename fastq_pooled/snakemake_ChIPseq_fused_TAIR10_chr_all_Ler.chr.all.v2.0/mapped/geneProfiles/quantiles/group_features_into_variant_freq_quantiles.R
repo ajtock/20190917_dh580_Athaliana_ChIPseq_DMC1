@@ -387,6 +387,13 @@ featuresAcc1_orthoGR <- GRanges(seqnames = paste0("Col_", featuresAcc1_ortho$seq
                                                  end = featuresAcc1_ortho$end),
                                 strand = featuresAcc1_ortho$strand,
                                 featureID = featuresAcc1_ortho$ID)
+featuresAcc1_orthoGR_ol <- findOverlaps(query = featuresAcc1_orthoGR,
+                                        subject = genomeMaskGR,
+                                        type = "any", select = "all",
+                                        ignore.strand = TRUE)
+featuresAcc1_orthoGR <- featuresAcc1_orthoGR[-unique(queryHits(featuresAcc1_orthoGR_ol))]
+featuresAcc1_ortho <- featuresAcc1_ortho[which(featuresAcc1_ortho$ID %in% featuresAcc1_orthoGR$featureID),]
+stopifnot(all.equal(featuresAcc1_ortho$ID, featuresAcc1_orthoGR$featureID))
 
 # Get ranges corresponding to orderRegion
 if(orderRegion == "bodies") {
@@ -624,6 +631,7 @@ write.table(ranLocAcc1_DF_bed,
 
 
 # Convert featuresAcc2_ortho into GRanges
+featuresAcc2_ortho <- featuresAcc2_ortho[which(featuresAcc2_ortho$Col %in% featuresAcc1_ortho$Col),]
 featuresAcc2_orthoGR <- GRanges(seqnames = paste0(substr(x = refbase, start = 22, stop = 24), "_", featuresAcc2_ortho$seqid),
                                 ranges = IRanges(start = featuresAcc2_ortho$start,
                                                  end = featuresAcc2_ortho$end),

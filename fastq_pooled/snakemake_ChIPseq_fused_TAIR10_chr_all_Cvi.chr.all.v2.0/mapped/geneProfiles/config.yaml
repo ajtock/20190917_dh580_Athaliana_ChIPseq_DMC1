@@ -7,7 +7,14 @@ SAMPLE: [
          "Col_DMC1_V5_Rep2_ChIP",
          "Col_DMC1_V5_Rep1_leaf",
          "Col_DMC1_V5_Rep1_mock",
-         "Col_DMC1_V5_Rep2_mock"
+         "Col_DMC1_V5_Rep2_mock",
+         "ColCviF1_DMC1_V5_Rep1_art150",
+         "ColLerF1_DMC1_V5_Rep1_art150",
+         "ColColF1_DMC1_V5_Rep1_art150",
+         "Col_DMC1_V5_Rep2_art150",
+         "Col_DMC1_V5_Rep1_art75",
+         "Col_REC8_Myc_Rep1_input",
+         "Col_REC8_HA_Rep2_ChIP"
         ]
 FEATURES:
       chrName: [
@@ -19,7 +26,7 @@ FEATURES:
                 "Chr1_Chr2_Chr3_Chr4_Chr5"
                ]
       genomeRegion: [
-                     "genomewide"
+                     "peri"
                     ]
 MAPPING:
       mode: "both"

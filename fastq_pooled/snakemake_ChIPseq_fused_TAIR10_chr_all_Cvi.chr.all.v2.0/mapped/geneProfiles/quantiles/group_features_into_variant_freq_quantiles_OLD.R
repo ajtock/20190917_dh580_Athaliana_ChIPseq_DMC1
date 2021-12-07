@@ -387,13 +387,6 @@ featuresAcc1_orthoGR <- GRanges(seqnames = paste0("Col_", featuresAcc1_ortho$seq
                                                  end = featuresAcc1_ortho$end),
                                 strand = featuresAcc1_ortho$strand,
                                 featureID = featuresAcc1_ortho$ID)
-featuresAcc1_orthoGR_ol <- findOverlaps(query = featuresAcc1_orthoGR,
-                                        subject = genomeMaskGR,
-                                        type = "any", select = "all",
-                                        ignore.strand = TRUE)
-featuresAcc1_orthoGR <- featuresAcc1_orthoGR[-unique(queryHits(featuresAcc1_orthoGR_ol))]
-featuresAcc1_ortho <- featuresAcc1_ortho[which(featuresAcc1_ortho$ID %in% featuresAcc1_orthoGR$featureID),]
-stopifnot(all.equal(featuresAcc1_ortho$ID, featuresAcc1_orthoGR$featureID))
 
 # Get ranges corresponding to orderRegion
 if(orderRegion == "bodies") {
@@ -403,7 +396,7 @@ if(orderRegion == "bodies") {
   featOrReAcc1_orthoGR <- promoters(featuresAcc1_orthoGR, upstream = 1000, downstream = 0)
 } else if(orderRegion == "terminators") {
   # Obtain 1000 bp downstream of end coordinates
-  source("/projects/meiosis/ajt200/Rfunctions/TTSplus.R")
+  source("/projects/ajt200/Rfunctions/TTSplus.R")
   featOrReAcc1_orthoGR <- TTSplus(featuresAcc1_orthoGR, upstream = -1, downstream = 1000)
 } else if(orderRegion == "genes") {
   featOrReAcc1_orthoGR <- GRanges(seqnames = paste0("Col_", featuresAcc1_ortho$seqid),
@@ -470,7 +463,7 @@ if(orderRegion == "bodies") {
   ranLORAcc1GR <- promoters(ranLocAcc1GR, upstream = 1000, downstream = 0)
 } else if(orderRegion == "terminators") {
   # Obtain 1000 bp downstream of end coordinates
-  source("/projects/meiosis/ajt200/Rfunctions/TTSplus.R")
+  source("/projects/ajt200/Rfunctions/TTSplus.R")
   ranLORAcc1GR <- TTSplus(ranLocAcc1GR, upstream = -1, downstream = 1000)
 } else if(orderRegion == "genes") {
   ranLORAcc1GR <- GRanges(seqnames = as.character(seqnames(ranLocAcc1GR)),
@@ -631,7 +624,6 @@ write.table(ranLocAcc1_DF_bed,
 
 
 # Convert featuresAcc2_ortho into GRanges
-featuresAcc2_ortho <- featuresAcc2_ortho[which(featuresAcc2_ortho$Col %in% featuresAcc1_ortho$Col),]
 featuresAcc2_orthoGR <- GRanges(seqnames = paste0(substr(x = refbase, start = 22, stop = 24), "_", featuresAcc2_ortho$seqid),
                                 ranges = IRanges(start = featuresAcc2_ortho$start,
                                                  end = featuresAcc2_ortho$end),
@@ -647,7 +639,7 @@ if(orderRegion == "bodies") {
   featOrReAcc2_orthoGR <- promoters(featuresAcc2_orthoGR, upstream = 1000, downstream = 0)
 } else if(orderRegion == "terminators") {
   # Obtain 1000 bp downstream of end coordinates
-  source("/projects/meiosis/ajt200/Rfunctions/TTSplus.R")
+  source("/projects/ajt200/Rfunctions/TTSplus.R")
   featOrReAcc2_orthoGR <- TTSplus(featuresAcc2_orthoGR, upstream = -1, downstream = 1000)
 } else if(orderRegion == "genes") {
   featOrReAcc2_orthoGR <- GRanges(seqnames = paste0(substr(x = refbase, start = 22, stop = 24), "_", featuresAcc2_ortho$seqid),
@@ -714,7 +706,7 @@ if(orderRegion == "bodies") {
   ranLORAcc2GR <- promoters(ranLocAcc2GR, upstream = 1000, downstream = 0)
 } else if(orderRegion == "terminators") {
   # Obtain 1000 bp downstream of end coordinates
-  source("/projects/meiosis/ajt200/Rfunctions/TTSplus.R")
+  source("/projects/ajt200/Rfunctions/TTSplus.R")
   ranLORAcc2GR <- TTSplus(ranLocAcc2GR, upstream = -1, downstream = 1000)
 } else if(orderRegion == "genes") {
   ranLORAcc2GR <- GRanges(seqnames = as.character(seqnames(ranLocAcc2GR)),

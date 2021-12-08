@@ -26,7 +26,7 @@ FEATURES:
                 "Chr1_Chr2_Chr3_Chr4_Chr5"
                ]
       genomeRegion: [
-                     "peri"
+                     "arm"
                     ]
 MAPPING:
       mode: "both"
